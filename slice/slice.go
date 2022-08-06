@@ -1,7 +1,12 @@
 package slice
 
-type AnySlice[T any] []T
+import (
+	"strconv"
 
+	"github.com/pav5000/go-common/types"
+)
+
+type AnySlice[T any] []T
 type ComparableSlice[T comparable] []T
 
 // New creates the new comparable slice from provided elements
@@ -65,7 +70,7 @@ func (s ComparableSlice[T]) UniqueInplace() ComparableSlice[T] {
 func (s ComparableSlice[T]) Unique(cap int) ComparableSlice[T] {
 	switch len(s) {
 	case 0:
-		return s
+		return nil
 	case 1:
 		return []T{s[0]}
 	case 2:
@@ -89,4 +94,30 @@ func (s ComparableSlice[T]) Unique(cap int) ComparableSlice[T] {
 		newSlice = append(newSlice, elem)
 	}
 	return newSlice
+}
+
+// IntSliceToStrings converts the slice of signed integers to the slice of strings
+func IntSliceToStrings[T types.SignedInteger](slice []T) []string {
+	if len(slice) == 0 {
+		return nil
+	}
+
+	strs := make([]string, len(slice))
+	for i, value := range slice {
+		strs[i] = strconv.FormatInt(int64(value), 10)
+	}
+	return strs
+}
+
+// UintSliceToStrings converts the slice of unsigned integers to the slice of strings
+func UintSliceToStrings[T types.UnsignedInteger](slice []T) []string {
+	if len(slice) == 0 {
+		return nil
+	}
+
+	strs := make([]string, len(slice))
+	for i, value := range slice {
+		strs[i] = strconv.FormatUint(uint64(value), 10)
+	}
+	return strs
 }
