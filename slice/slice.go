@@ -1,6 +1,7 @@
 package slice
 
 import (
+	"reflect"
 	"strconv"
 
 	"github.com/pav5000/go-common/types"
@@ -96,28 +97,54 @@ func (s ComparableSlice[T]) Unique(cap int) ComparableSlice[T] {
 	return newSlice
 }
 
-// IntSliceToStrings converts the slice of signed integers to the slice of strings
-func IntSliceToStrings[T types.SignedInteger](slice []T) []string {
+// IntSliceToStrings converts the slice of integers to the slice of strings
+func IntSliceToStrings[T types.Integer](slice []T) ComparableSlice[string] {
 	if len(slice) == 0 {
 		return nil
 	}
 
 	strs := make([]string, len(slice))
-	for i, value := range slice {
-		strs[i] = strconv.FormatInt(int64(value), 10)
+	switch reflect.TypeOf(slice[0]).Kind() {
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
+		for i, value := range slice {
+			strs[i] = strconv.FormatInt(int64(value), 10)
+		}
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
+		for i, value := range slice {
+			strs[i] = strconv.FormatUint(uint64(value), 10)
+		}
 	}
 	return strs
 }
 
-// UintSliceToStrings converts the slice of unsigned integers to the slice of strings
-func UintSliceToStrings[T types.UnsignedInteger](slice []T) []string {
+// StringSliceToInt converts the slice of strings to the slice of integers
+func StringSliceToInt[T types.Integer](slice []string, defaultValue T) ComparableSlice[T] {
 	if len(slice) == 0 {
 		return nil
 	}
 
-	strs := make([]string, len(slice))
-	for i, value := range slice {
-		strs[i] = strconv.FormatUint(uint64(value), 10)
+	ints := make([]T, len(slice))
+	t := reflect.TypeOf(ints[0])
+	bitSize := t.Bits()
+	switch t.Kind() {
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
+		for i, str := range slice {
+			num, err := strconv.ParseInt(str, 10, bitSize)
+			if err != nil {
+				ints[i] = defaultValue
+				continue
+			}
+			ints[i] = T(num)
+		}
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
+		for i, str := range slice {
+			num, err := strconv.ParseUint(str, 10, bitSize)
+			if err != nil {
+				ints[i] = defaultValue
+				continue
+			}
+			ints[i] = T(num)
+		}
 	}
-	return strs
+	return ints
 }

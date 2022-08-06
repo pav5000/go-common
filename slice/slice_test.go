@@ -134,18 +134,42 @@ func Test_Unique_NegaviteCap(t *testing.T) {
 	assert.EqualValues(t, []int{1, 2, 3, 4}, newSlice)
 }
 
-func Test_IntSliceToStrings(t *testing.T) {
-	slice := New(1, 2, 3, 4)
+func Test_IntSliceToStringsSigned(t *testing.T) {
+	slice := New(-2, -1, 1, 2, 3, 4)
 
 	newSlice := IntSliceToStrings(slice)
 
-	assert.EqualValues(t, []string{"1", "2", "3", "4"}, newSlice)
+	assert.EqualValues(t, []string{"-2", "-1", "1", "2", "3", "4"}, newSlice)
 }
 
-func Test_UintSliceToStrings(t *testing.T) {
-	slice := []uint32{1, 2, 3, 4}
+func Test_UintSliceToStringsUnsigned(t *testing.T) {
+	slice := []uint64{1, 2, 3, 4, 18446744073709551615}
 
-	newSlice := UintSliceToStrings(slice)
+	newSlice := IntSliceToStrings(slice)
 
-	assert.EqualValues(t, []string{"1", "2", "3", "4"}, newSlice)
+	assert.EqualValues(t, []string{"1", "2", "3", "4", "18446744073709551615"}, newSlice)
+}
+
+func Test_StringSliceToInt_simple(t *testing.T) {
+	slice := []string{"1", "2", "3", "4"}
+
+	newSlice := StringSliceToInt(slice, 0)
+
+	assert.EqualValues(t, []int{1, 2, 3, 4}, newSlice)
+}
+
+func Test_StringSliceToInt_bitOverflowSigned(t *testing.T) {
+	slice := []string{"-200", "-100", "0", "100", "200"}
+
+	newSlice := StringSliceToInt[int8](slice, 42)
+
+	assert.EqualValues(t, []int8{42, -100, 0, 100, 42}, newSlice)
+}
+
+func Test_StringSliceToInt_bitOverflowUnsigned(t *testing.T) {
+	slice := []string{"-100", "0", "100", "200", "300"}
+
+	newSlice := StringSliceToInt[uint8](slice, 42)
+
+	assert.EqualValues(t, []uint8{42, 0, 100, 200, 42}, newSlice)
 }
