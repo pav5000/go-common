@@ -148,3 +148,13 @@ func StringSliceToInt[T types.Integer](slice []string, defaultValue T) Comparabl
 	}
 	return ints
 }
+
+// Has checks if the elem exists in the slice
+func (s ComparableSlice[T]) Has(elem T) bool {
+	for _, sliceElem := range s {
+		if elem == sliceElem {
+			return true
+		}
+	}
+	return false
+}
