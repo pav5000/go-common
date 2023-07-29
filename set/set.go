@@ -22,9 +22,14 @@ func FromSlice[T comparable](slice []T) Set[T] {
 	return set
 }
 
-// Add adds an element into the set
+// Add adds the element into the set
 func (s Set[T]) Add(elem T) {
 	s[elem] = struct{}{}
+}
+
+// Remove removes the element from the set
+func (s Set[T]) Remove(elem T) {
+	delete(s, elem)
 }
 
 // Has checks if the set contains the element
