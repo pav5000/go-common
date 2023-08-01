@@ -65,6 +65,19 @@ func (s ComparableSlice[T]) UniqueInplace() ComparableSlice[T] {
 	return newSlice
 }
 
+// RemoveElementsInplace removes all elements which value matches the provided value
+// will mutate the array the slice is using
+func (s ComparableSlice[T]) RemoveElementsInplace(elemToRemove T) ComparableSlice[T] {
+	newSlice := s[:0]
+	for _, sliceElem := range s {
+		if sliceElem == elemToRemove {
+			continue
+		}
+		newSlice = append(newSlice, sliceElem)
+	}
+	return newSlice
+}
+
 // Unique leaves only unique elements
 // returns the independent copy of the slice's data
 // if the capacity is set to -1, len(s) will be used as the capacity
