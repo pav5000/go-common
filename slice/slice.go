@@ -23,18 +23,14 @@ func NewAny[T any](elems ...T) AnySlice[T] {
 // Copy creates another slice from the same elements
 func (s AnySlice[T]) Copy() AnySlice[T] {
 	newSlice := make(AnySlice[T], len(s))
-	for i, elem := range s {
-		newSlice[i] = elem
-	}
+	copy(newSlice, s)
 	return newSlice
 }
 
 // Copy creates another slice from the same elements
 func (s ComparableSlice[T]) Copy() ComparableSlice[T] {
 	newSlice := make(ComparableSlice[T], len(s))
-	for i, elem := range s {
-		newSlice[i] = elem
-	}
+	copy(newSlice, s)
 	return newSlice
 }
 
