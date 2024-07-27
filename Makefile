@@ -1,6 +1,6 @@
 BINDIR=$(CURDIR)/bin
 GOVER=$(shell go version | perl -nle '/(go\d\S+)/; print $$1;')
-LINTVER=v1.54.2
+LINTVER=v1.59.1
 LINTBIN=${BINDIR}/lint_${GOVER}_${LINTVER}
 SMARTIMPORTS=${BINDIR}/smartimports_${GOVER}
 
