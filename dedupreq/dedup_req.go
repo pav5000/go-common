@@ -59,12 +59,9 @@ func (d *Deduper[Key, Res]) Request(ctx context.Context, key Key) (Res, error) {
 	}
 
 	// making request by ourselves
-	if d.callback == nil {
-		var res Res
-
-		return res, errNilCallback
+	if d.callback != nil {
+		request.res, request.err = d.callback(ctx, key)
 	}
-	request.res, request.err = d.callback(ctx, key)
 	d.lock.Lock()
 	delete(d.inFlightRequests, key)
 	d.lock.Unlock()
