@@ -65,6 +65,9 @@ func (d *Deduper[Key, Res]) Request(ctx context.Context, key Key) (Res, error) {
 		return res, errNilCallback
 	}
 	request.res, request.err = d.callback(ctx, key)
+	d.lock.Lock()
+	delete(d.inFlightRequests, key)
+	d.lock.Unlock()
 	close(request.done)
 
 	return request.res, request.err

@@ -90,3 +90,21 @@ func Test_TwoParallelRequestsWithDifferentKeys_DoSeparateRequestsToBackend(t *te
 
 	assert.ElementsMatch(t, []int{0, 1}, keys)
 }
+
+func Test_TwoSequentialRequests_MakeTwoBackendRequests(t *testing.T) {
+	resQueue := make(chan int, 2)
+	resQueue <- 1
+	resQueue <- 2
+	d := New(func(ctx context.Context, key int) (int, error) {
+		assert.Equal(t, 42, key)
+		return <-resQueue, nil
+	})
+
+	res1, err1 := d.Request(context.Background(), 42)
+	res2, err2 := d.Request(context.Background(), 42)
+
+	require.NoError(t, err1)
+	require.NoError(t, err2)
+	assert.EqualValues(t, 1, res1)
+	assert.EqualValues(t, 2, res2)
+}
