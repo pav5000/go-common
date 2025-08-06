@@ -4,26 +4,27 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_Parse_EmptyStringGivesZeroDuration(t *testing.T) {
 	dur, err := Parse("")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{0, 0, 0}, dur)
 }
 
 func Test_Parse_WHitespacesOnlyGiveZeroDuration(t *testing.T) {
 	dur, err := Parse("  	")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{0, 0, 0}, dur)
 }
 
 func Test_Parse_YearsOnlyReturnFilledYearsField(t *testing.T) {
 	dur, err := Parse("2y")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{
 		Years: 2,
 	}, dur)
@@ -32,7 +33,7 @@ func Test_Parse_YearsOnlyReturnFilledYearsField(t *testing.T) {
 func Test_Parse_MonthsOnlyReturnFilledMonthsField(t *testing.T) {
 	dur, err := Parse("3m")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{
 		Months: 3,
 	}, dur)
@@ -41,7 +42,7 @@ func Test_Parse_MonthsOnlyReturnFilledMonthsField(t *testing.T) {
 func Test_Parse_DaysOnlyReturnFilledDaysField(t *testing.T) {
 	dur, err := Parse("4d")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{
 		Days: 4,
 	}, dur)
@@ -50,7 +51,7 @@ func Test_Parse_DaysOnlyReturnFilledDaysField(t *testing.T) {
 func Test_Parse_AllGroupsFilled_ReturnAllFilledFields(t *testing.T) {
 	dur, err := Parse("1d 2y 3m")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{
 		Years:  2,
 		Months: 3,
@@ -61,7 +62,7 @@ func Test_Parse_AllGroupsFilled_ReturnAllFilledFields(t *testing.T) {
 func Test_Parse_AllGroupsAreMultiDigit_ReturnAllFilledFields(t *testing.T) {
 	dur, err := Parse("123d 456y 789m")
 
-	assert.NoError(t, err)
+	require.NoError(t, err)
 	assert.Equal(t, Duration{
 		Years:  456,
 		Months: 789,

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func Test_JSON(t *testing.T) {
@@ -22,7 +23,7 @@ func Test_JSON(t *testing.T) {
 
 		err := json.Unmarshal(rawJSON, &v)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t,
 			Obj{
 				LongDur: Duration{
@@ -45,7 +46,7 @@ func Test_JSON(t *testing.T) {
 
 		err := json.Unmarshal(rawJSON, &v)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t,
 			Obj{
 				LongDur: Duration{
@@ -68,7 +69,7 @@ func Test_JSON(t *testing.T) {
 
 		err := json.Unmarshal(rawJSON, &v)
 
-		assert.Error(t, err)
+		require.Error(t, err)
 	})
 
 	t.Run("Marshal", func(t *testing.T) {
@@ -80,8 +81,8 @@ func Test_JSON(t *testing.T) {
 			},
 		})
 
-		assert.NoError(t, err)
-		assert.Equal(t, `{"longdur":"1y 2m 3d"}`, string(rawJSON))
+		require.NoError(t, err)
+		assert.JSONEq(t, `{"longdur":"1y 2m 3d"}`, string(rawJSON))
 	})
 
 	t.Run("Marshal optional", func(t *testing.T) {
@@ -97,7 +98,7 @@ func Test_JSON(t *testing.T) {
 			},
 		})
 
-		assert.NoError(t, err)
-		assert.Equal(t, `{"longdur":"1y 2m 3d"}`, string(rawJSON))
+		require.NoError(t, err)
+		assert.JSONEq(t, `{"longdur":"1y 2m 3d"}`, string(rawJSON))
 	})
 }

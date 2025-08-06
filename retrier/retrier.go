@@ -8,7 +8,7 @@ import (
 	"github.com/pav5000/go-common/ctxsleep"
 )
 
-// Retry the function several times unless cb returns nil or retry count reaches specified retryCount
+// Retry the function several times unless cb returns nil or retry count reaches specified retryCount.
 func Retry(ctx context.Context, retryCount int, pause time.Duration, cb func(context.Context) error) error {
 	var lastError error
 	for i := 0; i <= retryCount; i++ {
@@ -24,5 +24,6 @@ func Retry(ctx context.Context, retryCount int, pause time.Duration, cb func(con
 	if lastError == nil {
 		return nil
 	}
+
 	return errors.New("retry attempts exceeded: " + lastError.Error())
 }

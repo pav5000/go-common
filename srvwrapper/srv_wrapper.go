@@ -33,6 +33,7 @@ func New[Req Validatable, Res any](handleFn func(context.Context, Req) (Res, err
 	var req Req
 	var reqCast interface{} = req
 	_, emptyReqMode := reqCast.(EmptyRequest)
+
 	return &Handler[Req, Res]{
 		handleFn: handleFn,
 
@@ -46,6 +47,7 @@ func (h Handler[Req, Res]) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		_, _ = w.Write([]byte("only POST allowed here"))
+
 		return
 	}
 
@@ -56,6 +58,7 @@ func (h Handler[Req, Res]) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			writeErrorText(w, "unmarshaling JSON", err)
+
 			return
 		}
 
@@ -63,6 +66,7 @@ func (h Handler[Req, Res]) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			writeErrorText(w, "validating request", err)
+
 			return
 		}
 	}
@@ -72,6 +76,7 @@ func (h Handler[Req, Res]) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		statusCode := CodeFromError(err)
 		w.WriteHeader(statusCode)
 		writeErrorText(w, http.StatusText(statusCode), err)
+
 		return
 	}
 

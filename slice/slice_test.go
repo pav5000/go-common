@@ -29,7 +29,7 @@ func Test_UniqueInplace_NoElements(t *testing.T) {
 
 	slice = slice.UniqueInplace()
 
-	assert.Len(t, slice, 0)
+	assert.Empty(t, slice)
 }
 
 func Test_UniqueInplace_OneElement(t *testing.T) {
@@ -77,7 +77,7 @@ func Test_Unique_NoElements(t *testing.T) {
 
 	slice = slice.Unique(0)
 
-	assert.Len(t, slice, 0)
+	assert.Empty(t, slice)
 }
 
 func Test_Unique_OneElement(t *testing.T) {

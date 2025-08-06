@@ -14,12 +14,13 @@ const (
 )
 
 // RandomASCIIString generates a random string from characters which present in the provided charset
-// only 1-byte characters are supported
+// only 1-byte characters are supported.
 func RandomASCIIString(charset string, length int) string {
 	res := strings.Builder{}
 	res.Grow(length)
-	for i := 0; i < length; i++ {
+	for range length {
 		res.WriteByte(charset[rand.Intn(len(charset))])
 	}
+
 	return res.String()
 }

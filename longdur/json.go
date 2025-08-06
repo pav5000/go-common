@@ -19,6 +19,7 @@ func (d *Duration) UnmarshalJSON(rawValue []byte) error {
 	}
 
 	*d = parsed
+
 	return nil
 }
 

@@ -12,7 +12,7 @@ func Test_Head(t *testing.T) {
 	assert.Equal(t, "some text", Head("some text", 20))
 	assert.Equal(t, "some text", Head("some text", 9))
 
-	assert.Equal(t, "", Head("привет", 0))
+	assert.Empty(t, Head("привет", 0))
 	assert.Equal(t, "п", Head("привет", 1))
 	assert.Equal(t, "пр", Head("привет", 2))
 	assert.Equal(t, "при", Head("привет", 3))
@@ -22,10 +22,10 @@ func Test_Head(t *testing.T) {
 	assert.Equal(t, "привет", Head("привет", 7))
 	assert.Equal(t, "привет", Head("привет", 20))
 
-	assert.Equal(t, "", Head("", 10))
-	assert.Equal(t, "", Head("", 0))
+	assert.Empty(t, Head("", 10))
+	assert.Empty(t, Head("", 0))
 	assert.Equal(t, "a", Head("a", 10))
-	assert.Equal(t, "", Head("a", 0))
+	assert.Empty(t, Head("a", 0))
 }
 
 func Test_HeadBytes(t *testing.T) {

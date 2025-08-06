@@ -11,7 +11,7 @@ func Test_String_AllZerosGiveEmptyString(t *testing.T) {
 
 	res := dur.String()
 
-	assert.Equal(t, "", res)
+	assert.Empty(t, res)
 }
 
 func Test_String_FilledOnlyYears_GiveStringWithOnlyYears(t *testing.T) {

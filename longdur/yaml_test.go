@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )
 
@@ -18,7 +19,7 @@ func Test_YAML(t *testing.T) {
 
 		err := yaml.Unmarshal(rawYAML, &v)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t,
 			Obj{
 				LongDur: Duration{
@@ -37,7 +38,7 @@ func Test_YAML(t *testing.T) {
 
 		err := yaml.Unmarshal(rawYAML, &v)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t,
 			Obj{
 				LongDur: Duration{
@@ -56,7 +57,7 @@ func Test_YAML(t *testing.T) {
 
 		err := yaml.Unmarshal(rawYAML, &v)
 
-		assert.NoError(t, err)
+		require.NoError(t, err)
 		assert.Equal(t,
 			Obj{
 				LongDur: Duration{
@@ -78,7 +79,7 @@ func Test_YAML(t *testing.T) {
 			},
 		})
 
-		assert.NoError(t, err)
-		assert.Equal(t, "longdur: 1y 2m 3d\n", string(rawYAML))
+		require.NoError(t, err)
+		assert.YAMLEq(t, "longdur: 1y 2m 3d\n", string(rawYAML))
 	})
 }

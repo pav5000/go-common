@@ -19,6 +19,7 @@ func (d *Duration) UnmarshalYAML(node *yaml.Node) error {
 	}
 
 	*d = parsed
+
 	return nil
 }
 

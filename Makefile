@@ -1,6 +1,6 @@
 BINDIR=$(CURDIR)/bin
 GOVER=$(shell go version | perl -nle '/(go\d\S+)/; print $$1;')
-LINTVER=v1.64.8
+LINTVER=v2.3.1
 LINTBIN=${BINDIR}/lint_${GOVER}_${LINTVER}
 SMARTIMPORTS=${BINDIR}/smartimports_${GOVER}
 
@@ -10,14 +10,14 @@ test:
 	go test -timeout 20s ./...
 
 lint: install-lint
-	${LINTBIN} run
+	${LINTBIN} run --fix
 
 format: install-smartimports
 	${SMARTIMPORTS}
 
 install-lint: bindir
 	test -f ${LINTBIN} || \
-		(GOBIN=${BINDIR} go install github.com/golangci/golangci-lint/cmd/golangci-lint@${LINTVER} && \
+		(GOBIN=${BINDIR} go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${LINTVER} && \
 		mv ${BINDIR}/golangci-lint ${LINTBIN})
 
 install-smartimports: bindir
