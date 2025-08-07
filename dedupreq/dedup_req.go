@@ -43,6 +43,12 @@ func (d *Deduper[Key, Res]) Request(ctx context.Context, key Key) (Res, error) {
 			done: make(chan struct{}),
 		}
 		d.inFlightRequests[key] = request
+		defer func() {
+			d.lock.Lock()
+			delete(d.inFlightRequests, key)
+			d.lock.Unlock()
+			close(request.done)
+		}()
 	}
 	d.lock.Unlock()
 
@@ -50,9 +56,7 @@ func (d *Deduper[Key, Res]) Request(ctx context.Context, key Key) (Res, error) {
 	if ok {
 		select {
 		case <-ctx.Done():
-			var res Res
-
-			return res, ctx.Err()
+			return request.res, ctx.Err()
 		case <-request.done:
 			return request.res, request.err
 		}
@@ -61,11 +65,9 @@ func (d *Deduper[Key, Res]) Request(ctx context.Context, key Key) (Res, error) {
 	// making request by ourselves
 	if d.callback != nil {
 		request.res, request.err = d.callback(ctx, key)
+	} else {
+		request.err = errNilCallback
 	}
-	d.lock.Lock()
-	delete(d.inFlightRequests, key)
-	d.lock.Unlock()
-	close(request.done)
 
 	return request.res, request.err
 }
